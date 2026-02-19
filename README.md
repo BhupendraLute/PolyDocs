@@ -49,7 +49,8 @@ Individual components:
 - **GET /health**: Check backend status.
 - **POST /api/scan**: Trigger a code change scan. Returns a list of modified files.
 
-## Current Phase: Phase 2 (Code Change Scanner) - COMPLETE
+## Current Phase: Phase 3 (Documentation Compiler Engine) - COMPLETE
 
 - **Phase 1 (Foundation):** Monorepo setup, basic backend/frontend, Supabase integration, Tailwind CSS.
 - **Phase 2 (Scanner):** Git integration, file change detection, and scanner API.
+- **Phase 3 (Compiler):** Documentation generation engine (mocked), versioned storage in `docs/`.
