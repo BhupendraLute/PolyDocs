@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import { api } from './lib/api';
+import type { ScanResult } from './types';
+import { ScanResultCard } from './components/ScanResultCard';
 
 function App() {
   const [health, setHealth] = useState<{
@@ -6,12 +9,32 @@ function App() {
     timestamp: string;
   } | null>(null);
 
+  const [scanResult, setScanResult] = useState<ScanResult | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [compileDocs, setCompileDocs] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     fetch('http://localhost:3001/health')
       .then((res) => res.json())
       .then((data) => setHealth(data))
       .catch((err) => console.error('Error fetching health:', err));
   }, []);
+
+  const handleScan = async () => {
+    setLoading(true);
+    setError(null);
+    setScanResult(null);
+    try {
+      const result = await api.triggerScan(compileDocs);
+      setScanResult(result);
+    } catch (err) {
+      console.error(err);
+      setError('Failed to scan repository. Ensure backend is running.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-900 text-slate-50 font-sans selection:bg-indigo-500/30">
@@ -26,7 +49,7 @@ function App() {
           </p>
         </header>
 
-        <main className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <main className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
           {/* Backend Status Card */}
           <section className="bg-slate-800/50 rounded-2xl p-8 border border-slate-700 shadow-xl backdrop-blur-sm transition-all hover:border-slate-600">
             <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
@@ -61,21 +84,76 @@ function App() {
               Synchronize your codebase with localized documentation using Lingo.dev. Versioned,
               compiled, and ready for production.
             </p>
-            <div className="flex flex-wrap gap-4">
-              <button className="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-indigo-500/25 active:scale-95">
-                View Versions
-              </button>
-              <button className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl transition-all border border-slate-600 active:scale-95">
-                Scan Codebase
-              </button>
+
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-3 mb-2">
+                <input
+                  type="checkbox"
+                  id="compile"
+                  className="w-5 h-5 rounded border-slate-600 bg-slate-700 text-indigo-500 focus:ring-indigo-500/50 focus:ring-offset-0"
+                  checked={compileDocs}
+                  onChange={(e) => setCompileDocs(e.target.checked)}
+                />
+                <label
+                  htmlFor="compile"
+                  className="text-slate-300 font-medium select-none cursor-pointer"
+                >
+                  Also Compile Documentation (Mock)
+                </label>
+              </div>
+
+              <div className="flex flex-wrap gap-4">
+                <button
+                  onClick={handleScan}
+                  disabled={loading}
+                  className={`px-6 py-3 font-bold rounded-xl transition-all shadow-lg active:scale-95 flex items-center justify-center min-w-[160px]
+                    ${
+                      loading
+                        ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
+                        : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-500/25'
+                    }`}
+                >
+                  {loading ? (
+                    <span className="flex items-center gap-2">
+                      <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                          fill="none"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Scanning...
+                    </span>
+                  ) : (
+                    'Scan Codebase'
+                  )}
+                </button>
+              </div>
+
+              {error && (
+                <div className="mt-4 p-3 bg-rose-500/10 border border-rose-500/20 rounded-lg text-rose-300 text-sm">
+                  {error}
+                </div>
+              )}
             </div>
           </section>
         </main>
 
+        {scanResult && <ScanResultCard result={scanResult} />}
+
         <footer className="mt-20 pt-8 border-t border-slate-800 text-center">
           <p className="text-slate-500 text-sm">
-            &copy; 2026 PolyDocs Platform. Developed by{' '}
-            <span className="text-indigo-400 font-semibold">Bhupendra Lute</span> with ❤️
+            &copy; 2026 PolyDocs Platform. Precision documentation by{' '}
+            <span className="text-indigo-400 font-semibold">Lingo.dev</span>
           </p>
         </footer>
       </div>
