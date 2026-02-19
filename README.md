@@ -4,15 +4,15 @@ PolyDocs is an automated system that keeps your documentation synchronized with 
 
 ## Features
 
-- **Auto-Sync:** Keeps documentation updated with every merge.
-- **Multilingual:** Supports English, Spanish, French, and Hindi.
-- **Code Protection:** Prevents code blocks and API signatures from being translated.
-- **Versioned Docs:** Docs are treated as compiled artifacts tied to commit hashes.
+- **Code Change Scanner:** Automatically detects modified source files in the repository.
 
 ## Project Structure
 
 - `backend/`: Node.js + Express + TypeScript server.
-- `frontend/`: React + Vite + TypeScript dashboard.
+  - `src/services/git.ts`: Git integration service.
+  - `src/services/scanner.ts`: Logic to detect and filter file changes.
+  - `src/controllers/scanController.ts`: API endpoint for triggering scans.
+- `frontend/`: React + Vite + TypeScript dashboard with Tailwind CSS.
 - `docs/`: Versioned multilingual documentation storage.
 
 ## Getting Started
@@ -21,7 +21,8 @@ PolyDocs is an automated system that keeps your documentation synchronized with 
 
 - Node.js (v18+)
 - Supabase Account
-- Lingo.dev CLI
+- Lingo.dev CLI (optional for now)
+- Git installed and accessible in the system path.
 
 ### Setup
 
@@ -43,9 +44,12 @@ Individual components:
 - Backend: `npm run dev:backend`
 - Frontend: `npm run dev:frontend`
 
-## Current Phase: Phase 1 (Foundation)
+### Key API Endpoints
 
-- Monorepo structure initialized.
-- Backend (Express) and Frontend (React) scaffolded.
-- Supabase connection ready.
-- Basic health endpoint and UI shell.
+- **GET /health**: Check backend status.
+- **POST /api/scan**: Trigger a code change scan. Returns a list of modified files.
+
+## Current Phase: Phase 2 (Code Change Scanner) - COMPLETE
+
+- **Phase 1 (Foundation):** Monorepo setup, basic backend/frontend, Supabase integration, Tailwind CSS.
+- **Phase 2 (Scanner):** Git integration, file change detection, and scanner API.
