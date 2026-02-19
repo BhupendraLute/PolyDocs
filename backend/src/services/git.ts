@@ -5,11 +5,11 @@ import path from 'path';
 export class GitService {
   private git: SimpleGit;
 
-  constructor(repoPath: string = process.cwd()) {
+  constructor(repoPath?: string) {
     // Navigate up to the root of the monorepo from backend/
-    // Assuming backend is started from backend/ directory or root
-    // For safety, we can attempt to find the git root or just use the provided path
-    this.git = simpleGit(repoPath);
+    // Assuming backend is started from backend/ directory
+    const defaultPath = path.resolve(process.cwd(), '..');
+    this.git = simpleGit(repoPath || defaultPath);
   }
 
   async getCurrentCommit(): Promise<string> {
