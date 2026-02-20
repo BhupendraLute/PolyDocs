@@ -63,10 +63,11 @@ To enable the automation, you must configure the following Repository Secrets in
 
 Once configured, the pipeline will detect modified source files, trigger the compiler to generate markdown documentation, and automatically commit the new `docs/` folder back to the repository.
 
-## Current Phase: Phase 5 (CI/CD Pipeline) - FINALIZED
+## Current Phase: Phase 6 (Supabase Integration) - FINALIZED
 
 - **Phase 1 (Foundation):** Monorepo setup, basic backend/frontend, Supabase integration, Tailwind CSS.
 - **Phase 2 (Scanner):** Git integration, file change detection, and scanner API.
 - **Phase 3 (Compiler):** Documentation generation engine (mocked), versioned storage in `docs/`.
 - **Phase 4 (Frontend):** Dashboard integration, scan triggers, and result visualization.
 - **Phase 5 (CI/CD):** Automated GitHub Actions workflow for docs synchronization.
+- **Phase 6 (Supabase & Viewer):** Storing documentation in the database and frontend Markdown viewer.

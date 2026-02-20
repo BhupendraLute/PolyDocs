@@ -17,4 +17,12 @@ export const api = {
 
     return response.json();
   },
+  getDocs: async (commitHash?: string) => {
+    const url = commitHash
+      ? `${API_BASE_URL}/docs?commitHash=${commitHash}`
+      : `${API_BASE_URL}/docs`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Failed to fetch docs');
+    return response.json();
+  },
 };
