@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import { GitFileChange } from '../types';
 import { LingoService } from '../lib/lingo';
+import { supabase } from '../lib/supabase';
 
 export class CompilerService {
   private lingoService: LingoService;
@@ -59,6 +60,20 @@ export class CompilerService {
 
         await fs.ensureDir(targetDir);
         await fs.writeFile(targetFile, documentation);
+
+        // Save to Supabase
+        const { error: dbError } = await supabase.from('documents').insert([
+          {
+            commit_hash: commitHash,
+            language: 'en',
+            file_path: file.path,
+            content: documentation,
+          },
+        ]);
+
+        if (dbError) {
+          console.error(`Failed to save doc to Supabase for ${file.path}:`, dbError);
+        }
 
         generatedDocs.push(targetFile);
       } catch (error) {
