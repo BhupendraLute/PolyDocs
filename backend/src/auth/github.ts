@@ -9,10 +9,9 @@ const router = Router();
 router.get('/login', (req: Request, res: Response) => {
   const clientId = process.env.GITHUB_CLIENT_ID;
   const redirectUri = 'http://localhost:3001/api/auth/github/callback';
-  // We need basic user data. To access repos later, we will use the GitHub App installation token instead of this OAuth token.
-  const scope = 'read:user user:email';
 
-  const githubUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
+  // GitHub Apps do NOT use 'scope'. Their permissions are fixed.
+  const githubUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}`;
   res.redirect(githubUrl);
 });
 
