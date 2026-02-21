@@ -63,14 +63,22 @@ router.post('/', verifyGitHubSignature, async (req: Request, res: Response) => {
     console.log(`Received push event for repo: ${payload.repository.full_name}, branch: ${branch}`);
 
     // Prevent infinite loops! Ignore commits made by PolyDocs or GitHub Bots
+    const commitMsg = headCommit?.message || '';
+    const authorName = headCommit?.author?.name || '';
+    const committerName = headCommit?.committer?.name || '';
+
     const isBotCommit =
-      headCommit?.author?.name?.includes('polydocs') ||
-      headCommit?.author?.name?.includes('[bot]') ||
-      headCommit?.committer?.name?.includes('GitHub');
+      authorName.includes('polydocs') ||
+      authorName.includes('[bot]') ||
+      committerName.includes('polydocs') ||
+      committerName.includes('[bot]') ||
+      commitMsg.includes('auto-generate POLYDOCS.md') ||
+      commitMsg.includes('Automated Documentation Update (PolyDocs)') ||
+      commitMsg.includes('polydocs-update-');
 
     if (isBotCommit) {
       console.log(
-        `Ignored push event because commit was authored by a bot (${headCommit.author.name}).`
+        `Ignored push event because commit was authored by a bot (${headCommit.committer.name}).`
       );
       return res.status(200).send('Webhook processed - Ignored bot commit');
     }
