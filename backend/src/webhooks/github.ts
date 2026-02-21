@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
 import { supabase } from '../lib/supabase';
+import { runCompilerJob } from '../services/compiler';
 
 const router = Router();
 
@@ -61,25 +62,55 @@ router.post('/', verifyGitHubSignature, async (req: Request, res: Response) => {
 
     console.log(`Received push event for repo: ${payload.repository.full_name}, branch: ${branch}`);
 
+    // Prevent infinite loops! Ignore commits made by PolyDocs or GitHub Bots
+    const isBotCommit =
+      headCommit?.author?.name?.includes('polydocs') ||
+      headCommit?.author?.name?.includes('[bot]') ||
+      headCommit?.committer?.name?.includes('GitHub');
+
+    if (isBotCommit) {
+      console.log(
+        `Ignored push event because commit was authored by a bot (${headCommit.author.name}).`
+      );
+      return res.status(200).send('Webhook processed - Ignored bot commit');
+    }
+
     // Optionally filtering to only build on the default branch
     if (branch === defaultBranch && headCommit) {
       try {
         console.log(`Creating new build record for commit ${commitSha}`);
 
         // Insert into our builds table
-        const { error: dbError } = await supabase.from('builds').insert({
-          repository_id: repositoryId,
-          status: 'pending',
-          commit_sha: commitSha,
-          author_name: headCommit.author.name,
-          commit_message: headCommit.message,
-          branch: branch,
-        });
+        const { data: insertedBuild, error: dbError } = await supabase
+          .from('builds')
+          .insert({
+            repository_id: repositoryId,
+            status: 'pending',
+            commit_sha: commitSha,
+            author_name: headCommit.author.name,
+            commit_message: headCommit.message,
+            branch: branch,
+          })
+          .select()
+          .single();
 
         if (dbError) throw dbError;
 
-        // Phase 4: Here we would trigger the actual compiler worker process.
+        // Phase 4: Trigger the actual compiler worker process asynchronously.
         console.log(`Build successfully queued in database for repo ${repositoryId}.`);
+
+        // Ensure we have an installation ID from the webhook payload
+        const installationId = payload.installation?.id;
+        if (installationId) {
+          runCompilerJob(
+            insertedBuild.id,
+            installationId,
+            payload.repository.full_name,
+            branch
+          ).catch((e: any) => console.error('Background compiler failed:', e));
+        } else {
+          console.warn('No installation ID found in webhook payload. Cannot start compilation.');
+        }
       } catch (err: any) {
         console.error('Failed to insert build record:', err.message);
         return res.status(500).json({ error: 'Failed to process webhook' });

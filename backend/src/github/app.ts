@@ -15,9 +15,17 @@ export const getGitHubApp = () => {
     throw new Error('GITHUB_APP_ID or GITHUB_PRIVATE_KEY is not defined in .env');
   }
 
+  // Ensure the private key is properly formatted with newlines for PEM format.
+  // Sometimes .env strips newlines or passes literal \n strings.
+  let formattedKey = privateKey;
+  if (formattedKey.includes('\\n')) {
+    formattedKey = formattedKey.replace(/\\n/g, '\n');
+  }
+
   return new App({
     appId: appId,
-    privateKey: privateKey.replace(/\\n/g, '\n'), // handle newlines if passed as single string
+    privateKey: formattedKey,
+    Octokit: Octokit as any, // Inject REST client so getInstallationOctokit works correctly
   });
 };
 

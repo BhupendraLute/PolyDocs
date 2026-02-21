@@ -19,6 +19,7 @@ interface Build {
   commit_message: string | null;
   branch: string;
   created_at: string;
+  pr_url?: string;
   repositories: {
     repo_full_name: string;
   };
@@ -210,19 +211,33 @@ export function Dashboard() {
                 <div className="space-y-4">
                   {builds.map((build) => (
                     <div key={build.id} className="border-l-2 border-slate-700 pl-4 py-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        {build.status === 'success' && (
-                          <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                          {build.status === 'success' && (
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                          )}
+                          {build.status === 'failed' && (
+                            <span className="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.5)]" />
+                          )}
+                          {build.status === 'pending' || build.status === 'building' ? (
+                            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
+                          ) : null}
+                          <span className="text-sm font-medium text-slate-300 truncate max-w-[180px]">
+                            {build.repositories?.repo_full_name}
+                          </span>
+                        </div>
+
+                        {/* Phase 4: Show PR Link if available */}
+                        {build.status === 'success' && build.pr_url && (
+                          <a
+                            href={build.pr_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs bg-indigo-500/10 text-indigo-400 hover:text-indigo-300 hover:bg-indigo-500/20 px-2 py-1 rounded transition-colors"
+                          >
+                            View PR
+                          </a>
                         )}
-                        {build.status === 'failed' && (
-                          <span className="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.5)]" />
-                        )}
-                        {build.status === 'pending' || build.status === 'building' ? (
-                          <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
-                        ) : null}
-                        <span className="text-sm font-medium text-slate-300 truncate max-w-[180px]">
-                          {build.repositories?.repo_full_name}
-                        </span>
                       </div>
                       <p className="text-xs text-slate-400 font-mono truncate">
                         {build.commit_sha.substring(0, 7)} - {build.commit_message || 'No message'}
