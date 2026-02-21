@@ -25,7 +25,7 @@ export function Dashboard() {
       });
       if (!res.ok) throw new Error('Failed to fetch repositories');
       const data = await res.json();
-      setRepositories(data.repositories);
+      setRepositories(data.repositories ?? []);
     } catch (err) {
       console.error(err);
       setError('Could not load connected repositories.');
@@ -43,6 +43,7 @@ export function Dashboard() {
       const res = await fetch('http://localhost:3001/api/github/install-url', {
         headers: { Authorization: `Bearer ${token}` },
       });
+      if (!res.ok) throw new Error('Failed to fetch install URL');
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
