@@ -35,6 +35,10 @@ export function Dashboard() {
   };
 
   useEffect(() => {
+    if (!token) {
+      setLoading(false);
+      return;
+    }
     fetchRepositories();
   }, [token]);
 
