@@ -10,25 +10,51 @@ interface Repository {
   installation_id: number;
 }
 
+interface Build {
+  id: string;
+  repository_id: number;
+  status: 'pending' | 'building' | 'success' | 'failed';
+  commit_sha: string;
+  author_name: string | null;
+  commit_message: string | null;
+  branch: string;
+  created_at: string;
+  repositories: {
+    repo_full_name: string;
+  };
+}
+
 export function Dashboard() {
   const { logout, token } = useAuth();
   const [repositories, setRepositories] = useState<Repository[]>([]);
+  const [builds, setBuilds] = useState<Build[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchRepositories = async () => {
+  const fetchData = async () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('http://localhost:3001/api/github/installations', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) throw new Error('Failed to fetch repositories');
-      const data = await res.json();
-      setRepositories(data.repositories ?? []);
+      const [reposRes, buildsRes] = await Promise.all([
+        fetch('http://localhost:3001/api/github/installations', {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        fetch('http://localhost:3001/api/builds', {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+      ]);
+
+      if (!reposRes.ok) throw new Error('Failed to fetch repositories');
+      if (!buildsRes.ok) throw new Error('Failed to fetch builds');
+
+      const reposData = await reposRes.json();
+      const buildsData = await buildsRes.json();
+
+      setRepositories(reposData.repositories ?? []);
+      setBuilds(buildsData.builds ?? []);
     } catch (err) {
       console.error(err);
-      setError('Could not load connected repositories.');
+      setError('Could not load dashboard data.');
     } finally {
       setLoading(false);
     }
@@ -39,7 +65,7 @@ export function Dashboard() {
       setLoading(false);
       return;
     }
-    fetchRepositories();
+    fetchData();
   }, [token]);
 
   const handleInstallApp = async () => {
@@ -96,7 +122,7 @@ export function Dashboard() {
             </p>
           </div>
           <button
-            onClick={fetchRepositories}
+            onClick={fetchData}
             className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-colors border border-slate-700"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -174,9 +200,40 @@ export function Dashboard() {
           <div className="col-span-1 space-y-6">
             <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700 shadow-xl backdrop-blur-sm">
               <h3 className="font-bold text-lg mb-4 text-slate-200">Recent Activity</h3>
-              <p className="text-sm text-slate-500 italic">
-                No recent documentation builds. Push to main branch to trigger a build (Phase 3).
-              </p>
+
+              {builds.length === 0 ? (
+                <p className="text-sm text-slate-500 italic">
+                  No recent documentation builds. Push to your connected repository to trigger a
+                  webhook!
+                </p>
+              ) : (
+                <div className="space-y-4">
+                  {builds.map((build) => (
+                    <div key={build.id} className="border-l-2 border-slate-700 pl-4 py-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        {build.status === 'success' && (
+                          <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                        )}
+                        {build.status === 'failed' && (
+                          <span className="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.5)]" />
+                        )}
+                        {build.status === 'pending' || build.status === 'building' ? (
+                          <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
+                        ) : null}
+                        <span className="text-sm font-medium text-slate-300 truncate max-w-[180px]">
+                          {build.repositories?.repo_full_name}
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-400 font-mono truncate">
+                        {build.commit_sha.substring(0, 7)} - {build.commit_message || 'No message'}
+                      </p>
+                      <p className="text-xs text-slate-500 mt-1">
+                        {new Date(build.created_at).toLocaleTimeString()} ({build.status})
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
