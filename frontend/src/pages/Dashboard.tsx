@@ -54,6 +54,7 @@ export function Dashboard() {
       }
     } catch (err) {
       console.error('Error fetching install URL', err);
+      setError('Could not retrieve the GitHub App installation URL. Please try again.');
     }
   };
 
