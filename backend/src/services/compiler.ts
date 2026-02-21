@@ -86,8 +86,12 @@ ${aggregatedCode}
 Output ONLY the markdown content, no conversational filler.
     `;
 
+    if (!process.env.GEMINI_API_KEY) {
+      throw new Error('GEMINI_API_KEY is not configured in the environment.');
+    }
+
     const geminiResponse = await axios.post(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`,
       {
         contents: [
           {
@@ -98,6 +102,7 @@ Output ONLY the markdown content, no conversational filler.
       {
         headers: {
           'Content-Type': 'application/json',
+          'x-goog-api-key': process.env.GEMINI_API_KEY,
         },
         timeout: 60000, // allow 60 seconds for generation
       }
