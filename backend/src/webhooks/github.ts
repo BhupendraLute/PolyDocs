@@ -78,7 +78,7 @@ router.post('/', verifyGitHubSignature, async (req: Request, res: Response) => {
 
     if (isBotCommit) {
       console.log(
-        `Ignored push event because commit was authored by a bot (${headCommit.committer.name}).`
+        `Ignored push event because commit was authored by a bot (author: ${authorName}, committer: ${committerName}).`
       );
       return res.status(200).send('Webhook processed - Ignored bot commit');
     }
