@@ -2,8 +2,6 @@ import { getGitHubApp } from '../github/app';
 import { supabase } from '../lib/supabase';
 import { Octokit } from '@octokit/rest';
 import axios from 'axios';
-import fs from 'fs-extra';
-import path from 'path';
 import { LingoDotDevEngine } from '@lingo.dev/_sdk';
 
 /**
