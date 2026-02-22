@@ -22,8 +22,19 @@ export async function runCompilerJob(
   try {
     console.log(`[Compiler Job] Starting job for build ${buildId} on ${repositoryFullName}`);
 
-    // 1. Mark build as running
-    await supabase.from('builds').update({ status: 'building' }).eq('id', buildId);
+    // 1. Mark build as running and fetch the associated repository ID
+    const { data: buildRecord, error: buildError } = await supabase
+      .from('builds')
+      .update({ status: 'building' })
+      .eq('id', buildId)
+      .select('repository_id')
+      .single();
+
+    if (buildError || !buildRecord) {
+      throw new Error(`Failed to initialize build record for ${buildId}`);
+    }
+
+    const repositoryId = buildRecord.repository_id;
 
     const app = getGitHubApp();
 
@@ -154,7 +165,18 @@ Output ONLY the markdown content, no conversational filler.
       },
     ];
 
-    // 2. Build translated Blobs
+    const dbDocuments = [
+      {
+        repository_id: repositoryId,
+        build_id: buildId,
+        commit_hash: baseCommitSha,
+        file_path: 'POLYDOCS.md',
+        content: generatedDoc,
+        locale: 'en',
+      },
+    ];
+
+    // 2. Build translated Blobs and DB Records
     for (let i = 0; i < targetLocales.length; i++) {
       const locale = targetLocales[i];
       const translatedMd = localizedMdStrings[i];
@@ -172,6 +194,24 @@ Output ONLY the markdown content, no conversational filler.
         type: 'blob' as const,
         sha: localeBlob.sha,
       });
+
+      dbDocuments.push({
+        repository_id: repositoryId,
+        build_id: buildId,
+        commit_hash: baseCommitSha,
+        file_path: `POLYDOCS.${locale}.md`,
+        content: translatedMd,
+        locale: locale,
+      });
+    }
+
+    console.log(
+      `[Compiler Job] Saving ${dbDocuments.length} translations to Supabase 'documents' table...`
+    );
+    const { error: dbError } = await supabase.from('documents').insert(dbDocuments);
+    if (dbError) {
+      console.error(`[Compiler Job] Failed to save documents to database:`, dbError);
+      // We log the error but don't strictly fail the GitHub PR push
     }
 
     // 3. Create a new tree containing ALL docs

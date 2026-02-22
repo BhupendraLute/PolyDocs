@@ -24,9 +24,11 @@ interface Build {
     repo_full_name: string;
   };
 }
+import { useNavigate } from 'react-router-dom';
 
 export function Dashboard() {
   const { logout, token } = useAuth();
+  const navigate = useNavigate();
   const [repositories, setRepositories] = useState<Repository[]>([]);
   const [builds, setBuilds] = useState<Build[]>([]);
   const [loading, setLoading] = useState(true);
@@ -187,10 +189,17 @@ export function Dashboard() {
                         </div>
                       </div>
                     </div>
-                    <div>
-                      <span className="px-3 py-1 bg-emerald-500/10 text-emerald-400 text-xs font-medium rounded-full border border-emerald-500/20">
+                    <div className="flex items-center gap-3">
+                      <span className="px-3 py-1 bg-emerald-500/10 text-emerald-400 text-xs font-medium rounded-full cursor-default mt-1 border border-emerald-500/20">
                         Active
                       </span>
+                      <button
+                        onClick={() => navigate(`/docs/${repo.id}`)}
+                        className="px-3 py-1 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 text-xs font-medium rounded-full border border-indigo-500/20 transition-colors flex items-center gap-1"
+                      >
+                        <BookOpen className="w-3 h-3" />
+                        View Docs
+                      </button>
                     </div>
                   </div>
                 ))}
