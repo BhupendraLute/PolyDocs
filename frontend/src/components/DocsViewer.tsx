@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { api } from '../lib/api';
 
+import { useAuth } from '../auth/AuthContext';
+
 export interface Document {
   id: string;
   commit_hash: string;
@@ -11,19 +13,22 @@ export interface Document {
   created_at: string;
 }
 
-export function DocsViewer() {
+export function DocsViewer({ repositoryId }: { repositoryId: string | number }) {
+  const { token } = useAuth();
   const [docs, setDocs] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDoc, setSelectedDoc] = useState<Document | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!token) return;
+
     api
-      .getDocs()
-      .then((data: Document[]) => {
-        setDocs(data);
-        if (data.length > 0) {
-          setSelectedDoc(data[0]);
+      .getDocs(repositoryId, token)
+      .then((data: { documents: Document[] }) => {
+        setDocs(data.documents);
+        if (data.documents.length > 0) {
+          setSelectedDoc(data.documents[0]);
         }
       })
       .catch((err) => {

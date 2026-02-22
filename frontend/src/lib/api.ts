@@ -17,11 +17,12 @@ export const api = {
 
     return response.json();
   },
-  getDocs: async (commitHash?: string) => {
-    const url = commitHash
-      ? `${API_BASE_URL}/docs?commitHash=${commitHash}`
-      : `${API_BASE_URL}/docs`;
-    const response = await fetch(url);
+  getDocs: async (repoId: string | number, token: string) => {
+    const response = await fetch(`${API_BASE_URL}/docs/${repoId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (!response.ok) throw new Error('Failed to fetch docs');
     return response.json();
   },
