@@ -89,6 +89,6 @@ graph TD
 ---
 
 <div align="center">
-  <p>Built with ❤️ by <b>Antigravity</b> • Powered by <b>PolyDocs Intelligence</b></p>
+  <p>Built with ❤️ • Powered by <b>PolyDocs Intelligence</b></p>
   <p>© 2026 PolyDocs Platform. All Rights Reserved.</p>
 </div>
