@@ -102,8 +102,12 @@ Output ONLY the markdown content, no conversational filler.
       throw new Error('GEMINI_API_KEY is not configured in the environment.');
     }
 
+    const geminiApiUrl =
+      process.env.GEMINI_API_URL ||
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+
     const geminiResponse = await axios.post(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`,
+      geminiApiUrl,
       {
         contents: [
           {

@@ -35,7 +35,8 @@ app.get('/health', (req: Request, res: Response) => {
 app.use(errorHandler);
 
 app.listen(port, () => {
-  console.log(`Backend server running on http://localhost:${port}`);
+  const serverUrl = process.env.BACKEND_URL || `http://localhost:${port}`;
+  console.log(`Backend server running on ${serverUrl}`);
 
   // Start Smee webhook forwarder if in development and a Smee URL is provided
   if (process.env.NODE_ENV !== 'production' && process.env.SMEE_URL) {

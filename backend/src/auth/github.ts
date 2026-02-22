@@ -8,7 +8,8 @@ const router = Router();
 // Redirect to GitHub for login
 router.get('/login', (req: Request, res: Response) => {
   const clientId = process.env.GITHUB_CLIENT_ID;
-  const redirectUri = 'http://localhost:3001/api/auth/github/callback';
+  const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+  const redirectUri = `${backendUrl}/api/auth/github/callback`;
 
   // GitHub Apps do NOT use 'scope'. Their permissions are fixed.
   const githubUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}`;
@@ -81,10 +82,12 @@ router.get('/callback', async (req: Request, res: Response) => {
     );
 
     // 5. Redirect back to frontend
-    res.redirect(`http://localhost:5173/?token=${token}`);
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    res.redirect(`${frontendUrl}/?token=${token}`);
   } catch (error: any) {
     console.error('OAuth Callback Error:', error?.response?.data || error.message);
-    res.redirect('http://localhost:5173/login?error=oauth_failed');
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    res.redirect(`${frontendUrl}/login?error=oauth_failed`);
   }
 });
 

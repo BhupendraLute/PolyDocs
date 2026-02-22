@@ -1,6 +1,7 @@
 import { Github } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
 import { Navigate } from 'react-router-dom';
+import { API_BASE_URL } from '../lib/api';
 
 export function Login() {
   const { isAuthenticated } = useAuth();
@@ -11,7 +12,7 @@ export function Login() {
 
   const handleLogin = () => {
     // Redirect to backend OAuth initiation
-    window.location.href = 'http://localhost:3001/api/auth/github/login';
+    window.location.href = `${API_BASE_URL}/auth/github/login`;
   };
 
   return (

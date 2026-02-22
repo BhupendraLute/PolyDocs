@@ -2,6 +2,7 @@ import { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Github, BookOpen, Globe, Zap, Shield, Sparkles } from 'lucide-react';
+import { API_BASE_URL } from '../lib/api';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -56,7 +57,7 @@ export function Landing() {
   }, []);
 
   const handleLogin = () => {
-    window.location.href = 'http://localhost:3001/api/auth/github/login';
+    window.location.href = `${API_BASE_URL}/auth/github/login`;
   };
 
   return (

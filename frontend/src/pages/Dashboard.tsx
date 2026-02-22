@@ -4,6 +4,7 @@ import { useLocation, Outlet } from 'react-router-dom';
 import { gsap } from 'gsap';
 import type { Repository, Build } from '../types/dashboard';
 import { Sidebar } from '../components/dashboard/Sidebar';
+import { API_BASE_URL } from '../lib/api';
 
 export function Dashboard() {
   const { token } = useAuth();
@@ -18,10 +19,10 @@ export function Dashboard() {
     setError(null);
     try {
       const [reposRes, buildsRes] = await Promise.all([
-        fetch('http://localhost:3001/api/github/installations', {
+        fetch(`${API_BASE_URL}/github/installations`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        fetch('http://localhost:3001/api/builds', {
+        fetch(`${API_BASE_URL}/builds`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
@@ -64,7 +65,7 @@ export function Dashboard() {
 
   const handleInstallApp = async () => {
     try {
-      const res = await fetch('http://localhost:3001/api/github/install-url', {
+      const res = await fetch(`${API_BASE_URL}/github/install-url`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error('Failed to fetch install URL');
