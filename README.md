@@ -1,12 +1,37 @@
-# PolyDocs: Global Documentation Auto-Sync Platform
+<div align="center">
+  <h1>PolyDocs</h1>
+  <p><b>Global Documentation Auto-Sync Platform</b></p>
 
-PolyDocs is an automated system that keeps your documentation synchronized with your codebase and localizes it into multiple languages using Lingo.dev.
+  <p>
+    <img src="https://img.shields.io/badge/Gemini_AI-experimental-blue?style=flat-square&logo=google" alt="Gemini AI" />
+    <img src="https://img.shields.io/badge/Lingo.dev-Localization-indigo?style=flat-square" alt="Lingo.dev" />
+    <img src="https://img.shields.io/badge/Node.js-20.x-green?style=flat-square&logo=node.js" alt="Node.js" />
+    <img src="https://img.shields.io/badge/React-18.x-61DAFB?style=flat-square&logo=react" alt="React" />
+    <img src="https://img.shields.io/badge/Supabase-DB-3ECF8E?style=flat-square&logo=supabase" alt="Supabase" />
+  </p>
 
-## Features
+  <p>
+    <a href="#demo">▶️ Demo Video</a> • 
+    <a href="http://localhost:5173">🌍 Live Dashboard</a> • 
+    <a href="http://localhost:3001/health">🏥 Backend Health</a>
+  </p>
+</div>
 
-- **Code Change Scanner:** Automatically detects modified source files in the repository.
+---
 
-## Project Structure
+### 🚀 Overview
+
+**PolyDocs** is a state-of-the-art, automated system designed to keep your technical documentation in perfect sync with your evolving codebase. Leveraging **Gemini AI** for intelligent generation and **Lingo.dev** for high-fidelity localization, PolyDocs ensures your global users always have up-to-date documentation in their native language.
+
+### ✨ Key Features
+
+- 🔍 **Intelligent Scanner:** Automatically detects code changes and triggers doc updates.
+- 🤖 **AI-Powered Generation:** Beautiful English documentation generated directly from your source.
+- 🌍 **Native Localization:** Seamlessly translates docs into Spanish, French, and Japanese using Lingo.dev.
+- 📦 **Docker Orchestrated:** One-command production deployment for the entire stack.
+- 🛡️ **Premium Dashboard:** Real-time visibility into your documentation lifecycle and build status.
+
+### 🏗️ Project Architecture
 
 ```mermaid
 graph TD
@@ -18,78 +43,52 @@ graph TD
     Frontend --> Backend
 ```
 
-- `backend/`: Node.js + Express + TypeScript server.
-  - `src/middleware/errorHandler.ts`: Centralized error handling.
-  - `src/services/git.ts`: Git automation service.
-  - `src/webhooks/github.ts`: Webhook intake and processing.
-- `frontend/`: React + Vite + TypeScript dashboard.
-  - `src/components/DocsViewer.tsx`: Premium Markdown renderer.
-- `docs/`: Versioned multilingual documentation storage.
+### 🛠️ Tech Stack
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js (v18+)
-- Supabase Account
-- Docker (for production deployment)
-- Git installed in system path.
-
-### Setup
-
-1. Clone the repository.
-2. Run `npm install` in the root.
-3. Create `.env` files in `backend/` and `frontend/` using the `.env.example` templates.
-
-### Running Locally
-
-```bash
-npm run dev
-```
-
-## Production Deployment
-
-### Docker Orchestration
-
-The easiest way to deploy PolyDocs is via Docker Compose. The frontend will be available on port **5173**:
-
-```bash
-# Build and start services in detached mode
-npm run docker:up
-
-# Stop services
-npm run docker:down
-```
-
-The app will be accessible at:
-
-- **Frontend**: http://localhost:5173
-- **Backend Health**: http://localhost:3001/health
-
-### Manual Build
-
-```bash
-# Build all workspaces
-npm run build
-
-# Start backend production server
-cd backend && npm start
-```
-
-## CI/CD Pipeline
-
-Automated via GitHub Actions (`.github/workflows/docs-sync.yml`). Requires `SUPABASE_URL`, `SUPABASE_KEY`, and `LINGO_API_KEY` project secrets.
-
-## Project Evolution
-
-- **Phase 1 (Foundation):** Monorepo structure and Supabase plumbing.
-- **Phase 2 (Scanner):** Intelligent Git change detection logic.
-- **Phase 3 (Compiler):** Multi-language documentation engine.
-- **Phase 4 (Dashboard):** Real-time monitoring and triggering UI.
-- **Phase 5 (Automation):** Seamless CI/CD integration.
-- **Phase 6 (Viewer):** High-fidelity Markdown rendering and storage.
-- **Phase 7 (Production):** Dockerization and centralized error architecture.
+- **Frontend:** React, Vite, Tailwind CSS, GSAP (Animations)
+- **Backend:** Node.js, Express, TypeScript
+- **Intelligence:** Google Gemini AI, Lingo.dev Engine
+- **Storage:** Supabase (PostgreSQL + Auth)
+- **Ops:** Docker, Docker Compose, Nginx
 
 ---
 
-**PolyDocs** - Built for the global developer ecosystem.
+### 📦 Getting Started
+
+#### Prerequisites
+
+- Node.js (v18+) & Docker
+- Supabase Account & Lingo.dev API Key
+
+#### Installation
+
+1. **Clone & Install:**
+
+   ```bash
+   git clone https://github.com/your-repo/polydocs.git
+   cd polydocs
+   npm install
+   ```
+
+2. **Configure:**
+   Create `.env` files in `backend/` and `frontend/` using the provided `.env.example` templates.
+
+3. **Deploy with Docker:**
+   ```bash
+   npm run docker:up
+   ```
+
+---
+
+### 🏥 System Status
+
+- **Frontend Dashboard:** [http://localhost:5173](http://localhost:5173)
+- **API Server:** [http://localhost:3001](http://localhost:3001)
+- **Health Check:** [http://localhost:3001/health](http://localhost:3001/health)
+
+---
+
+<div align="center">
+  <p>Built with ❤️ by <b>Antigravity</b> • Powered by <b>PolyDocs Intelligence</b></p>
+  <p>© 2026 PolyDocs Platform. All Rights Reserved.</p>
+</div>
