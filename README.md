@@ -11,9 +11,7 @@
   </p>
 
   <p>
-    <a href="#demo">▶️ Demo Video</a> • 
-    <a href="http://localhost:5173">🌍 Live Dashboard</a> • 
-    <a href="http://localhost:3001/health">🏥 Backend Health</a>
+    <a href="#demo">▶️ Demo Video</a>
   </p>
 </div>
 
