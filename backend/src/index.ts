@@ -11,6 +11,7 @@ const port = process.env.PORT || 3001;
 import routes from './routes';
 import githubAuth from './auth/github';
 import githubWebhooks from './webhooks/github';
+import { errorHandler } from './middleware/errorHandler';
 
 app.use(cors());
 
@@ -30,6 +31,8 @@ app.use('/api/webhooks/github', githubWebhooks);
 app.get('/health', (req: Request, res: Response) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
+
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Backend server running on http://localhost:${port}`);

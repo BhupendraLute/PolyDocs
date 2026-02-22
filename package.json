@@ -1,17 +1,22 @@
 {
-	"name": "polydocs",
-	"private": true,
-	"scripts": {
-		"dev:backend": "npm run dev --workspace=@polydocs/backend",
-		"dev:frontend": "npm run dev --workspace=@polydocs/frontend",
-		"dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-		"install:all": "npm install && npm install --workspace=@polydocs/backend && npm install --workspace=@polydocs/frontend"
-	},
-	"workspaces": [
-		"backend",
-		"frontend"
-	],
-	"devDependencies": {
-		"concurrently": "^8.2.2"
-	}
+  "name": "polydocs",
+  "private": true,
+  "scripts": {
+    "dev:backend": "npm run dev --workspace=@polydocs/backend",
+    "dev:frontend": "npm run dev --workspace=@polydocs/frontend",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build:backend": "npm run build --workspace=@polydocs/backend",
+    "build:frontend": "npm run build --workspace=@polydocs/frontend",
+    "build": "npm run build:backend && npm run build:frontend",
+    "docker:up": "docker compose up --build -d",
+    "docker:down": "docker compose down",
+    "install:all": "npm install && npm install --workspace=@polydocs/backend && npm install --workspace=@polydocs/frontend"
+  },
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
 }

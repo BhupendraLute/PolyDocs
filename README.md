@@ -8,11 +8,22 @@ PolyDocs is an automated system that keeps your documentation synchronized with 
 
 ## Project Structure
 
+```mermaid
+graph TD
+    User([User]) --> Frontend[React Dashboard]
+    Github[GitHub Webhooks] --> Backend[Express Server]
+    Backend --> Supabase[(Supabase DB)]
+    Backend --> Lingo[Lingo.dev AI]
+    Backend --> Git[(Local Git Cache)]
+    Frontend --> Backend
+```
+
 - `backend/`: Node.js + Express + TypeScript server.
-  - `src/services/git.ts`: Git integration service.
-  - `src/services/scanner.ts`: Logic to detect and filter file changes.
-  - `src/controllers/scanController.ts`: API endpoint for triggering scans.
-- `frontend/`: React + Vite + TypeScript dashboard with Tailwind CSS.
+  - `src/middleware/errorHandler.ts`: Centralized error handling.
+  - `src/services/git.ts`: Git automation service.
+  - `src/webhooks/github.ts`: Webhook intake and processing.
+- `frontend/`: React + Vite + TypeScript dashboard.
+  - `src/components/DocsViewer.tsx`: Premium Markdown renderer.
 - `docs/`: Versioned multilingual documentation storage.
 
 ## Getting Started
@@ -21,53 +32,64 @@ PolyDocs is an automated system that keeps your documentation synchronized with 
 
 - Node.js (v18+)
 - Supabase Account
-- Lingo.dev CLI (optional for now)
-- Git installed and accessible in the system path.
+- Docker (for production deployment)
+- Git installed in system path.
 
 ### Setup
 
 1. Clone the repository.
-2. Run `npm install` in the root (installs all workspace dependencies).
-3. Create `.env` files in `backend/` and `frontend/` using the provided `.env.example` templates.
-4. Set up your Supabase project and add credentials to the `.env` files.
+2. Run `npm install` in the root.
+3. Create `.env` files in `backend/` and `frontend/` using the `.env.example` templates.
 
 ### Running Locally
-
-To run both backend and frontend simultaneously:
 
 ```bash
 npm run dev
 ```
 
-Individual components:
+## Production Deployment
 
-- Backend: `npm run dev:backend`
-- Frontend: `npm run dev:frontend`
+### Docker Orchestration
 
-### Key API Endpoints
+The easiest way to deploy PolyDocs is via Docker Compose. The frontend will be available on port **5173**:
 
-- **GET /health**: Check backend status.
-- **POST /api/scan**: Trigger a code change scan. Returns a list of modified files.
+```bash
+# Build and start services in detached mode
+npm run docker:up
+
+# Stop services
+npm run docker:down
+```
+
+The app will be accessible at:
+
+- **Frontend**: http://localhost:5173
+- **Backend Health**: http://localhost:3001/health
+
+### Manual Build
+
+```bash
+# Build all workspaces
+npm run build
+
+# Start backend production server
+cd backend && npm start
+```
 
 ## CI/CD Pipeline
 
-This project includes a fully automated GitHub Actions workflow (`.github/workflows/docs-sync.yml`) that syncs your documentation on every push to the `main` branch.
+Automated via GitHub Actions (`.github/workflows/docs-sync.yml`). Requires `SUPABASE_URL`, `SUPABASE_KEY`, and `LINGO_API_KEY` project secrets.
 
-### Setting Up GitHub Secrets
+## Project Evolution
 
-To enable the automation, you must configure the following Repository Secrets in GitHub (`Settings` > `Secrets and variables` > `Actions`):
+- **Phase 1 (Foundation):** Monorepo structure and Supabase plumbing.
+- **Phase 2 (Scanner):** Intelligent Git change detection logic.
+- **Phase 3 (Compiler):** Multi-language documentation engine.
+- **Phase 4 (Dashboard):** Real-time monitoring and triggering UI.
+- **Phase 5 (Automation):** Seamless CI/CD integration.
+- **Phase 6 (Viewer):** High-fidelity Markdown rendering and storage.
+- **Phase 7 (Production):** Dockerization and centralized error architecture.
 
-- `SUPABASE_URL`: Your Supabase project URL.
-- `SUPABASE_KEY`: Your Supabase anon or service role key.
-- `LINGO_API_KEY`: Your Lingo.dev API key (or an empty string if using the mock mode).
+---
 
-Once configured, the pipeline will detect modified source files, trigger the compiler to generate markdown documentation, and automatically commit the new `docs/` folder back to the repository.
-
-## Current Phase: Phase 6 (Supabase Integration) - FINALIZED
-
-- **Phase 1 (Foundation):** Monorepo setup, basic backend/frontend, Supabase integration, Tailwind CSS.
-- **Phase 2 (Scanner):** Git integration, file change detection, and scanner API.
-- **Phase 3 (Compiler):** Documentation generation engine (mocked), versioned storage in `docs/`.
-- **Phase 4 (Frontend):** Dashboard integration, scan triggers, and result visualization.
-- **Phase 5 (CI/CD):** Automated GitHub Actions workflow for docs synchronization.
-- **Phase 6 (Supabase & Viewer):** Storing documentation in the database and frontend Markdown viewer.
+**PolyDocs** - Built for the global developer ecosystem.
