@@ -1,5 +1,4 @@
 -- Run this in your Supabase SQL Editor to prepare for PolyDocs Phase 6
-DROP TABLE IF EXISTS documents CASCADE;
 
 CREATE TABLE documents (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
