@@ -9,6 +9,7 @@
 		"build": "tsc"
 	},
 	"dependencies": {
+		"@google/generative-ai": "^0.24.1",
 		"@octokit/app": "^14.1.0",
 		"@octokit/rest": "^19.0.13",
 		"@supabase/supabase-js": "^2.39.7",

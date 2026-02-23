@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../auth/AuthContext';
-import { useLocation, Outlet } from 'react-router-dom';
-import { gsap } from 'gsap';
+import { Outlet } from 'react-router-dom';
 import type { Repository, Build } from '../types/dashboard';
 import { Sidebar } from '../components/dashboard/Sidebar';
 import { API_BASE_URL } from '../lib/api';
 
 export function Dashboard() {
   const { token } = useAuth();
-  const location = useLocation();
   const [repositories, setRepositories] = useState<Repository[]>([]);
   const [builds, setBuilds] = useState<Build[]>([]);
   const [loading, setLoading] = useState(true);
@@ -50,18 +48,6 @@ export function Dashboard() {
     }
     fetchData();
   }, [token]);
-
-  useEffect(() => {
-    if (!loading && (repositories.length > 0 || builds.length > 0)) {
-      gsap.from('.stagger-item', {
-        y: 20,
-        opacity: 0,
-        duration: 0.5,
-        stagger: 0.05,
-        ease: 'power2.out',
-      });
-    }
-  }, [loading, location.pathname]);
 
   const handleInstallApp = async () => {
     try {

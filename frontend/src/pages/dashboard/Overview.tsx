@@ -24,7 +24,7 @@ export function Overview() {
 
   return (
     <>
-      <header className="mb-10 flex justify-between items-center p-8 rounded-[2rem] bg-gradient-to-br from-slate-900/80 to-slate-950/80 border border-white/5 backdrop-blur-xl shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] stagger-item">
+      <header className="mb-10 flex justify-between items-center p-8 rounded-[2rem] bg-gradient-to-br from-slate-900/80 to-slate-950/80 border border-white/5 backdrop-blur-xl shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] animate-fade-in-up">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <span className="px-2 py-0.5 bg-indigo-500/20 text-indigo-400 text-[10px] font-black uppercase tracking-widest rounded-md border border-indigo-500/20">
@@ -86,7 +86,7 @@ export function Overview() {
                 {repositories.slice(0, 3).map((repo) => (
                   <div
                     key={repo.id}
-                    className="stagger-item group flex items-center justify-between p-7 bg-slate-900/40 rounded-[1.5rem] border border-white/5 hover:border-indigo-500/40 transition-all hover:bg-slate-900/80 shadow-lg"
+                    className="animate-fade-in-up group flex items-center justify-between p-7 bg-slate-900/40 rounded-[1.5rem] border border-white/5 hover:border-indigo-500/40 transition-all hover:bg-slate-900/80 shadow-lg"
                   >
                     <div className="flex items-center gap-6">
                       <div className="w-14 h-14 bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl flex items-center justify-center group-hover:rotate-6 transition-transform border border-white/5 shadow-inner">
@@ -125,7 +125,7 @@ export function Overview() {
         </div>
 
         <aside className="space-y-8">
-          <section className="bg-gradient-to-b from-slate-900/60 to-slate-950/60 backdrop-blur-2xl rounded-[2rem] border border-white/5 p-8 h-full shadow-2xl relative overflow-hidden stagger-item">
+          <section className="bg-gradient-to-b from-slate-900/60 to-slate-950/60 backdrop-blur-2xl rounded-[2rem] border border-white/5 p-8 h-full shadow-2xl relative overflow-hidden animate-fade-in-up">
             <div className="absolute top-0 right-0 p-4 opacity-10">
               <Activity className="w-24 h-24" />
             </div>
@@ -148,7 +148,7 @@ export function Overview() {
                 {filteredBuilds.slice(0, 5).map((build) => (
                   <div
                     key={build.id}
-                    className="stagger-item relative pr-4 pb-8 border-l-2 border-slate-800 last:pb-0 ml-4"
+                    className="animate-fade-in-up relative pr-4 pb-8 border-l-2 border-slate-800 last:pb-0 ml-4"
                   >
                     <div
                       className={`absolute left-[-6px] top-0 w-2.5 h-2.5 rounded-full ${

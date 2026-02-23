@@ -7,7 +7,7 @@ export function DocumentationView() {
   const navigate = useNavigate();
 
   return (
-    <div className="stagger-item">
+    <div className="animate-fade-in-up">
       <header className="mb-12">
         <h1 className="text-4xl font-black tracking-tight text-white mb-2">Library Hub</h1>
         <p className="text-slate-400 font-medium">
@@ -18,7 +18,7 @@ export function DocumentationView() {
         {repositories.map((repo) => (
           <div
             key={repo.id}
-            className="bg-slate-900/40 rounded-3xl border border-white/5 p-6 hover:border-indigo-500/30 transition-all stagger-item group"
+            className="bg-slate-900/40 rounded-3xl border border-white/5 p-6 hover:border-indigo-500/30 transition-all animate-fade-in-up group"
           >
             <div className="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
               <BookOpen className="w-6 h-6 text-indigo-400" />

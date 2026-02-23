@@ -80,6 +80,6 @@ The primary workflow follows these steps when a user pushes code to a monitored 
 ---
 
 <div align="center">
-  <p><b>PolyDocs V1.0</b> • 2026</p>
+  <p><b>PolyDocs V1.0</b> • Built for <b>Lingo.dev Hackathon #2</b></p>
   <p>Engineered for the Global Developer Ecosystem</p>
 </div>

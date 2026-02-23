@@ -8,7 +8,7 @@ export function SettingsView() {
   const { user, logout } = useAuth();
 
   return (
-    <div className="stagger-item max-w-2xl">
+    <div className="animate-fade-in-up max-w-2xl">
       <header className="mb-12">
         <h1 className="text-4xl font-black tracking-tight text-white mb-2">Account Control</h1>
         <p className="text-slate-400 font-medium">
@@ -16,7 +16,7 @@ export function SettingsView() {
         </p>
       </header>
 
-      <div className="bg-slate-900/40 rounded-[2.5rem] border border-white/5 p-10 backdrop-blur-xl mb-8 stagger-item">
+      <div className="bg-slate-900/40 rounded-[2.5rem] border border-white/5 p-10 backdrop-blur-xl mb-8 animate-fade-in-up">
         <div className="flex items-center gap-6 mb-12">
           <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-3xl font-black shadow-2xl">
             {user?.username?.charAt(0).toUpperCase()}

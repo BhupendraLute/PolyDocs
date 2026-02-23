@@ -1,74 +1,17 @@
-import { useRef, useEffect } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Github, BookOpen, Globe, Zap, Shield, Sparkles } from 'lucide-react';
 import { API_BASE_URL } from '../lib/api';
 
-gsap.registerPlugin(ScrollTrigger);
-
 export function Landing() {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const featuresRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Hero Animation
-      gsap.from('.hero-content > *', {
-        y: 50,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.2,
-        ease: 'power4.out',
-      });
-
-      // Background Glows
-      gsap.to('.glow-1', {
-        x: '20%',
-        y: '20%',
-        duration: 8,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      });
-      gsap.to('.glow-2', {
-        x: '-20%',
-        y: '-10%',
-        duration: 10,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      });
-
-      // Features Animation
-      gsap.from('.feature-card', {
-        scrollTrigger: {
-          trigger: featuresRef.current,
-          start: 'top 80%',
-        },
-        y: 60,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: 'back.out(1.7)',
-      });
-    }, heroRef);
-
-    return () => ctx.revert();
-  }, []);
-
   const handleLogin = () => {
     window.location.href = `${API_BASE_URL}/auth/github/login`;
   };
 
   return (
-    <div
-      className="min-h-screen bg-slate-950 text-slate-50 selection:bg-indigo-500/30 overflow-x-hidden"
-      ref={heroRef}
-    >
+    <div className="min-h-screen bg-slate-950 text-slate-50 selection:bg-indigo-500/30 overflow-x-hidden">
       {/* Decorative Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="glow-1 absolute -top-1/4 -left-1/4 w-1/2 h-1/2 bg-indigo-500/10 blur-[120px] rounded-full" />
-        <div className="glow-2 absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-purple-500/10 blur-[120px] rounded-full" />
+        <div className="glow-1 absolute -top-1/4 -left-1/4 w-1/2 h-1/2 bg-indigo-500/10 blur-[120px] rounded-full animate-pulse" />
+        <div className="glow-2 absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-purple-500/10 blur-[120px] rounded-full animate-pulse [animation-delay:2s]" />
       </div>
 
       {/* Navigation */}
@@ -93,7 +36,7 @@ export function Landing() {
 
       {/* Hero Section */}
       <section className="relative pt-24 pb-32 px-6">
-        <div className="max-w-5xl mx-auto text-center hero-content">
+        <div className="max-w-5xl mx-auto text-center hero-content animate-in fade-in slide-in-from-bottom-8 duration-1000">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-sm font-semibold mb-8">
             <Sparkles className="w-4 h-4" />
             <span>AI-Powered Documentation Localization</span>
@@ -124,7 +67,7 @@ export function Landing() {
       </section>
 
       {/* Features Grid */}
-      <section className="py-32 px-6 relative z-10" ref={featuresRef}>
+      <section className="py-32 px-6 relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
             <h2 className="text-4xl font-bold mb-4">Powerful Features</h2>
@@ -168,7 +111,7 @@ function FeatureCard({
   description: string;
 }) {
   return (
-    <div className="feature-card p-8 rounded-3xl bg-slate-900/40 border border-white/5 hover:border-indigo-500/50 transition-colors group cursor-default">
+    <div className="feature-card p-8 rounded-3xl bg-slate-900/40 border border-white/5 hover:border-indigo-500/50 transition-all group cursor-default hover:-translate-y-2 duration-300">
       <div className="w-14 h-14 rounded-2xl bg-slate-800 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
         {icon}
       </div>
