@@ -9,10 +9,6 @@
     <img src="https://img.shields.io/badge/React-18.x-61DAFB?style=flat-square&logo=react" alt="React" />
     <img src="https://img.shields.io/badge/Supabase-DB-3ECF8E?style=flat-square&logo=supabase" alt="Supabase" />
   </p>
-
-  <p>
-    <a href="#demo">▶️ Demo Video</a>
-  </p>
 </div>
 
 ---
@@ -87,6 +83,6 @@ graph TD
 ---
 
 <div align="center">
-  <p>Built with ❤️ • Powered by <b>PolyDocs Intelligence</b></p>
+  <p>Built with ❤️ for the <b>Lingo.dev Hackathon #2</b> • Powered by <b>PolyDocs Intelligence</b></p>
   <p>© 2026 PolyDocs Platform. All Rights Reserved.</p>
 </div>
